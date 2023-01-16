@@ -11,7 +11,7 @@ export default {
   setup() {
     function changeBewilligung(antrag) {
       data[antrag].bewilligt = !data[antrag].bewilligt;
-      console.log(antrag + ' bewilligt: ' + data[antrag].bewilligt);
+      console.log(antrag + 1 + ' bewilligt: ' + data[antrag].bewilligt);
     }
 
     return { data, changeBewilligung };
