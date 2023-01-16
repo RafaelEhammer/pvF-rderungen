@@ -50,12 +50,12 @@
     <div v-if="editing">
       <button @click="saveCell(index)">Save</button>
       <button @click="cancelEdit">Cancel</button>
-    </div>
   </div>
 </template>
-
 <script>
-export default {
+import { defineComponent, ref } from 'vue'
+
+export default defineComponent({
   props: {
     antraege: {
       type: Array,
@@ -66,32 +66,58 @@ export default {
       required: true,
     },
   },
-  data() {
+  setup(props) {
+    const editing = ref(false);
+    const maxFoerdersumme = ref(10000000);
+
+    function editCell(index) {
+      editing.value = true;
+    }
+    function saveCell(index) {
+      editing.value = false;
+    }
+    function cancelEdit() {
+      editing.value = false;
+    }
+
     return {
-      editing: false,
-      maxFoerdersumme: 10000000,
-    };
-  },
-  methods: {
-    editCell(index) {
-      this.editing = true;
-    },
-    saveCell(index) {
-      this.editing = false;
-      // Save the updated data here (e.g. by calling an API or updating a local data store)
-    },
-    cancelEdit() {
-      this.editing = false;
-      // Revert the changes here (e.g. by restoring the previous value from a local data store)
-    },
-  },
-};
+      antraege: props.antraege,
+      changeBewilligung: props.changeBewilligung,
+      maxFoerdersumme,
+      editing,
+      editCell,
+      saveCell,
+      cancelEdit
+    }
+  }
+});
 </script>
 
 <style scoped>
+/* Global Styles */
+body {
+  background-color: #f2e6ff;
+}
+
+/* Header Styles */
 h1 {
   text-align: center;
+  color: #383636;
+  margin-top: 50px;
+  margin-bottom: 30px;
 }
+
+/* Description Styles */
+div {
+  text-align: center;
+  font-size: 1.2em;
+  margin: 0 auto;
+  width: 80%;
+  color: #383636;
+  padding-bottom: 30px;
+}
+
+/* Table Styles */
 table {
   border-collapse: collapse;
   margin-left: auto;
@@ -99,28 +125,61 @@ table {
   font-size: 0.9em;
   font-family: sans-serif;
   width: 100%;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 20px rgba(153, 89, 182, 0.1);
 }
-thead tr {
-  background-color: #009879;
-  color: #ffffff;
-  text-align: left;
-}
-th tr {
-  padding: 12px 15px;
-  width: 25%;
+
+th {
   text-align: center;
+  background-color: #d6baf5;
+  color: #383636;
+  padding: 10px;
 }
-tbody tr {
-  border-bottom: 1px solid #dddddd;
-  color: #181818;
-  background-color: blanchedalmond;
+
+td {
+  text-align: center;
+  padding: 10px;
 }
-tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+
+/* Form Styles */
+input[type='text'],
+input[type='number'] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 0.9em;
 }
-tbody tr.active-row {
-  font-weight: bold;
-  color: #009879;
+
+input[type='checkbox'] {
+  margin-top: 20px;
+}
+
+input[type='text']:focus,
+input[type='number']:focus {
+  border: 2px solid #9b59b6;
+}
+
+button {
+  width: 100%;
+  background-color: #9b59b6;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+button:hover {
+  background-color: #8e44ad;
+}
+
+.editing-controls {
+  text-align: center;
+  margin-top: 20px;
 }
 </style>
